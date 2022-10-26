@@ -1,5 +1,5 @@
 #include "runtime/function/controller/character_controller.h"
-
+#include<iostream>
 #include "runtime/core/base/macro.h"
 
 #include "runtime/function/framework/component/motor/motor_component.h"
@@ -26,7 +26,7 @@ namespace Pilot
                 orientation,
                 Vector3::UNIT_SCALE);
     }
-
+    
     Vector3 CharacterController::move(const Vector3& current_position, const Vector3& displacement)
     {
         std::shared_ptr<PhysicsScene> physics_scene =
@@ -58,7 +58,7 @@ namespace Pilot
         hits.clear();
         
         world_transform.m_position -= 0.1f * Vector3::UNIT_Z;
-
+        
         // vertical pass
         if (physics_scene->sweep(
             m_rigidbody_shape,
@@ -77,16 +77,28 @@ namespace Pilot
         hits.clear();
 
         // side pass
-        //if (physics_scene->sweep(
-        //    m_rigidbody_shape,
-        //    /**** [0] ****/,
-        //    /**** [1] ****/,
-        //    /**** [2] ****/,
-        //    hits))
-        //{
-        //    final_position += /**** [3] ****/;
-        //}
-        //else
+        if (physics_scene->sweep(m_rigidbody_shape,
+                                 world_transform.getMatrix(),
+                                 horizontal_direction,
+                                 horizontal_displacement.length(),
+                                 hits))
+        {
+            Vector3 normal_sum = hits[0].hit_normal.normalisedCopy();
+            normal_sum.z       = 0.0f;
+            Vector3 tangent    = Vector3::UNIT_Z.crossProduct(normal_sum);
+
+            if (hits.size() == 1)
+            {
+                final_position += tangent * horizontal_direction.dotProduct(tangent.normalisedCopy()) *
+                                    horizontal_displacement.length();
+            }
+            else
+            {
+                for (size_t i = 1; i < hits.size(); i++)
+                    final_position -= hits[i].hit_distance * tangent;
+            }
+        }
+        else
         {
             final_position += horizontal_displacement;
         }

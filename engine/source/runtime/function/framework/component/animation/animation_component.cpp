@@ -169,12 +169,14 @@ namespace Pilot
             m_skeleton.extractPose(pose);
             poses.push_back(pose);
         }
+        //std::cout << 0 << ":" << poses[0].m_weight.m_blend_weight[0] << std::endl;
         for (int i = 1; i < blendStateData.m_clip_count; i++)
         {
             for (auto& pose : poses[i].m_weight.m_blend_weight)
             {
                 pose = blend_state->m_blend_weight[i];
             }
+            //std::cout << i << ":" << poses[i].m_weight.m_blend_weight[i] << std::endl;
             poses[0].blend(poses[i]);
         }
 
