@@ -83,9 +83,9 @@ namespace Pilot
                                  horizontal_displacement.length(),
                                  hits))
         {
-            Vector3 normal_sum = hits[0].hit_normal.normalisedCopy();
-            normal_sum.z       = 0.0f;
-            Vector3 tangent    = Vector3::UNIT_Z.crossProduct(normal_sum);
+            Vector3 normal = hits[0].hit_normal.normalisedCopy();
+            normal.z       = 0.0f;
+            Vector3 tangent    = Vector3::UNIT_Z.crossProduct(normal);
 
             if (hits.size() == 1)
             {
@@ -94,7 +94,7 @@ namespace Pilot
             }
             else
             {
-                for (size_t i = 1; i < hits.size(); i++)
+                for (size_t i = 0; i < hits.size(); i++)
                     final_position -= hits[i].hit_distance * tangent;
             }
         }
