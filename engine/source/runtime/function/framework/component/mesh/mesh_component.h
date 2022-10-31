@@ -28,6 +28,7 @@ namespace Piccolo
     private:
         META(Enable)
         MeshComponentRes m_mesh_res;
+        META(Enable)
 
         std::vector<GameObjectPartDesc> m_raw_meshes;
     };

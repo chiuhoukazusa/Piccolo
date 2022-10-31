@@ -114,7 +114,7 @@ namespace Piccolo
         if (current_character == nullptr)
             return;
 
-        ThirdPersonCameraParameter* param = static_cast<ThirdPersonCameraParameter*>(m_camera_res.m_parameter);
+        ThirdPersonCameraParameter* param = &p;
 
         Quaternion q_yaw, q_pitch;
 
@@ -128,8 +128,9 @@ namespace Piccolo
         Vector3     offset            = Vector3(0, horizontal_offset, vertical_offset);
 
         Vector3 center_pos = current_character->getPosition() + Vector3::UNIT_Z * vertical_offset;
-        Vector3 camera_pos =
-            current_character->getRotation() * param->m_cursor_pitch * offset + current_character->getPosition();
+        //Vector3 camera_pos =
+            //current_character->getRotation() * param->m_cursor_pitch * offset + current_character->getPosition();
+        auto    camera_pos     = cameraPos;
         Vector3 camera_forward = center_pos - camera_pos;
         Vector3 camera_up      = current_character->getRotation() * param->m_cursor_pitch * Vector3::UNIT_Z;
 
@@ -139,6 +140,7 @@ namespace Piccolo
 
         RenderSwapContext& swap_context = g_runtime_global_context.m_render_system->getSwapContext();
         CameraSwapData     camera_swap_data;
+        camera_swap_data.m_fov_x                           = param->m_fov;
         camera_swap_data.m_camera_type                     = RenderCameraType::Motor;
         camera_swap_data.m_view_matrix                     = desired_mat;
         swap_context.getLogicSwapData().m_camera_swap_data = camera_swap_data;

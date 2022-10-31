@@ -38,7 +38,13 @@ namespace Piccolo
         META(Enable)
         CameraComponentRes m_camera_res;
 
-        CameraMode m_camera_mode {CameraMode::invalid};
+        META(Enable)
+        Vector3 cameraPos;
+
+        META(Enable)
+        ThirdPersonCameraParameter p;
+
+        CameraMode m_camera_mode {CameraMode::third_person};
 
         Vector3 m_foward {Vector3::NEGATIVE_UNIT_Y};
         Vector3 m_up {Vector3::UNIT_Z};
